@@ -40,13 +40,13 @@ Courier status updates are manual until an external integration is implemented. 
 4. Run `pnpm auth:generate`. This saves strong access credentials privately to `.env.local` without printing them. Store the password in your password manager.
 5. Run `pnpm db:migrate`, then `pnpm dev`.
 
-The environment must contain DATABASE_URL, POS_ACCESS_PASSWORD (at least 24 characters), and POS_SESSION_SECRET (at least 32 characters). Missing setup leaves business data inaccessible. No database connection is needed for the production build.
+The environment must contain DATABASE_URL, POS_ACCESS_PASSWORD (at least 24 characters), and POS_SESSION_SECRET (at least 32 characters). Missing setup leaves business data inaccessible. The standalone pnpm build command does not contact the database; Vercel runs the migration first and therefore requires a working database connection.
 
 ## GitHub and Vercel
 
 Target repository owner: `samillah602-debug`. Verify this identity before creating or pushing a repository.
 
-Import the GitHub repository into Vercel. The included vercel.json selects Next.js and the normal pnpm build. Connect a PostgreSQL database, such as a Neon resource from Vercel's storage marketplace, and add the environment variables to the appropriate deployment environments. Keep preview data in a separate database from production. Run the migration against the selected database before using the deployment.
+Import the GitHub repository into Vercel. The included vercel.json selects Next.js and runs the database migration before pnpm build. Connect a PostgreSQL database, such as a Neon resource from Vercel's storage marketplace, and add the environment variables before deploying. Keep preview data in a separate database from production. The migration creates missing tables while preserving existing records and uses a transaction and advisory lock to handle overlapping builds safely.
 
 `pnpm typecheck`, `pnpm test`, and `pnpm build` validate the source. The SQL tests use an isolated PostgreSQL-compatible PGlite database and do not contact a live business database.
 
