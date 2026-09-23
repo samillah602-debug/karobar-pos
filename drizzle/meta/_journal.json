@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1789926379537,
+      "tag": "0000_overconfident_captain_stacy",
+      "breakpoints": true
+    }
+  ]
+}
